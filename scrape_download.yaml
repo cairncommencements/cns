@@ -1,0 +1,40 @@
+name: Daily Web Scraping and File Download
+
+on:
+  workflow_dispatch:
+  
+  schedule:
+    - cron: '0 0 * * *'  # Run the workflow daily at midnight
+jobs:
+  scrape_and_download:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up R
+      uses: r-lib/actions/setup-r@v1
+      with:
+        r-version: '4.0'
+
+    - name: Set up GitHub token
+      run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+    - name: Set up secrets
+      run: |
+        echo "INPUT_USER=${{ secrets.USER }}" >> $GITHUB_ENV
+        echo "INPUT_PW=${{ secrets.PW }}" >> $GITHUB_ENV
+
+    - name: Install dependencies
+      run: |
+        Rscript -e 'install.packages(c("rvest", "RSelenium", "httr", "tidyverse"))'
+
+    - name: Run R script
+      run: Rscript path/to/your/script.R
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: downloaded-file
+        path: downloaded_file.csv  # Adjust the file name
