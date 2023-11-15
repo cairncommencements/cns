@@ -31,7 +31,7 @@ jobs:
         Rscript -e 'install.packages(c("rvest", "RSelenium", "httr", "tidyverse"))'
 
     - name: Run R script
-      run: Rscript path/to/your/script.R
+      run: script.R
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
